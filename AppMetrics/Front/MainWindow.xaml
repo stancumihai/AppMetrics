@@ -1,0 +1,27 @@
+﻿<Window x:Class="AppMetricsCSharp.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="750" Width="1200">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+
+        <Label HorizontalAlignment="Center" Name="TitlePanel" FontSize="80">Check Options</Label>
+
+        <ContentControl Grid.Row="0" Content="{Binding SelectedViewModel}" />
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Click="Hide_Title" Margin="10" FontSize="30" Width="200" Content="Column"
+                    Command="{Binding UpdateViewCommand}" CommandParameter="Column" />
+            <Button Click="Hide_Title" Margin="10" FontSize="30" Width="200" Content="Pie"
+                    Command="{Binding UpdateViewCommand}" CommandParameter="Pie" />
+            <Button Click="Hide_Title" Margin="10" FontSize="30" Width="200" Content="Line"
+                    Command="{Binding UpdateViewCommand}" CommandParameter="Line" />
+        </StackPanel>
+    </Grid>
+</Window>
