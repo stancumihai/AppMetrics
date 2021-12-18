@@ -1,40 +1,48 @@
-﻿using System.Threading;
-using ConsoleApp1.meters;
-using Timer = ConsoleApp1.meters.Timer;
+﻿using System;
+using System.Threading;
 
 namespace ConsoleApp1
 {
     public class TaskClass
     {
-        public static void CounterForAllTasks()
-        {
-            Counter counter = new Counter();
-            CounterDecorator.counter = counter;
-            CounterDecorator.Wrapper(Task1);
-            CounterDecorator.Wrapper(Task1);
-            CounterDecorator.Wrapper(Task1);
-        }
-
         public static void TimerForAllTasks()
         {
-            Timer timer = new Timer();
-            TimerDecorator.timer = timer;
-            TimerDecorator.Wrapper(Task1, 1000);
-            TimerDecorator.Wrapper(Task2, 1000);
-            TimerDecorator.Wrapper(Task3, 1000);
-            TimerDecorator.Wrapper(Task4, 1000);
+            Measurer<int>.Wrapper(Task2);
+            Measurer<int>.Wrapper(Task3,1000);
+            Measurer<int>.Wrapper(Task3,1000);
+            Measurer<int>.Wrapper(Task3,1000);
+            Measurer<int>.Wrapper(Task4,1000);
+            // Measurer<int>.Wrapper(Task2);
+            // Measurer<int>.Wrapper(Task3,1000);
+            
         }
 
-        public static int Task1(int size)
+        public static int Task1()
         {
-            Thread.Sleep(size);
-            return size;
+            Console.WriteLine("Ce imi place aici");
+            Console.WriteLine("Ce imi place aici");
+            Console.WriteLine("Ce imi place aici");
+            Console.WriteLine("Ce imi place aici");
+            Console.WriteLine("Ce imi place aici");
+            
+            return 1;
         }
 
-        public static int Task2(int size)
+        public static int Task5()
         {
-            Thread.Sleep(size);
-            return size;
+            Console.WriteLine("Ce imi place aici");
+            Console.WriteLine("Ce imi place aici");
+            Console.WriteLine("Ce imi place aici");
+            Console.WriteLine("Ce imi place aici");
+            Console.WriteLine("Ce imi place aici");
+            
+            return 1;
+        }
+        
+        public static int Task2()
+        {
+            Thread.Sleep(2000);
+            return 1;
         }
 
         public static int Task3(int size)

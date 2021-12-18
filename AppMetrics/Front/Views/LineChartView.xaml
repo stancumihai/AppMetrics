@@ -5,6 +5,13 @@
              Width="800">
     <Grid>
         <Canvas x:Name="ChartCanvas"
-                Background="White" />
+                Background="White">
+            <ComboBox SelectionChanged = "changeUi">
+                <ComboBoxItem IsSelected="True">Time</ComboBoxItem>
+                <ComboBoxItem>Average</ComboBoxItem>
+                <ComboBoxItem>Max</ComboBoxItem>
+                <ComboBoxItem>Min</ComboBoxItem>
+            </ComboBox>
+        </Canvas>
     </Grid>
 </UserControl>

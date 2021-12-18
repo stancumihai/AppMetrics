@@ -28,6 +28,11 @@ namespace ConsoleApp1
             _time.Start();
         }
 
+        public static void NullifyRegistry()
+        {
+            _instance = null;
+        }
+
         public static MetricsRegistry Instance
         {
             get
@@ -49,16 +54,8 @@ namespace ConsoleApp1
                 _counters[key] = new Counter();
             }
 
-            Counter insertedCounter = null;
-            foreach (var keyName in _counters.Keys)
-            {
-                if (keyName.Equals(key))
-                {
-                    insertedCounter = _counters[key];
-                }
-            }
 
-            return insertedCounter;
+            return _counters[key];
         }
 
         public Timer Timer(String key)
@@ -69,16 +66,7 @@ namespace ConsoleApp1
                 _timers[key] = new Timer();
             }
 
-            Timer insertedTimer = null;
-            foreach (var keyName in _timers.Keys)
-            {
-                if (keyName.Equals(key))
-                {
-                    insertedTimer = _timers[key];
-                }
-            }
-
-            return insertedTimer;
+            return _timers[key];
         }
 
         //N-am idee ce face
@@ -150,7 +138,7 @@ namespace ConsoleApp1
 
         public Counter Countering(String key)
         {
-            return MetricsRegistry._instance.Counter(key);
+            return _instance.Counter(key);
         }
 
         public Timer Timering(String key)

@@ -23,32 +23,29 @@ namespace ConsoleApp1.meters
         {
             _balanceLock = new();
             Counter = 0;
-            Max = float.MinValue;
-            Min = float.MaxValue;
-            Sum = 0.0f;
+            _max = 100;
+            _min = float.MaxValue;
+            _sum = 0.0f;
             _dummyStuff = new List<double>() { -1.0f, 0.0f };
             _values = new();
         }
 
         public void Add(double value)
         {
-            lock (_balanceLock)
+            _values.Add(value);
+            Counter = Counter + 1;
+            if (Max < value)
             {
-                _values.Add(value);
-                Counter = Counter + 1;
-                if (Max < value)
-                {
-                    Max = value;
-                }
-
-                if (Min > value)
-                {
-                    Min = value;
-                }
-                
-                Sum += value;
-                update_var(value);
+                Max = value;
             }
+
+            if (Min > value)
+            {
+                Min = value;
+            }
+
+            Sum += value;
+            // update_var(value);
         }
 
         public int Counter

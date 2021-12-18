@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using ConsoleApp1;
+using ConsoleApp1.meters;
 using ConsoleApp1.reporters;
 
 // ReSharper disable All
@@ -17,24 +18,93 @@ namespace AppMetricsCSharp.Views
     {
         private const double XAxisStart = 100;
         private const double YAxisStart = 100;
-        private const double Interval = 50;
+        private const double Interval = 100;
         private List<Holder> _holders;
-        private List<Value> _values;
+
         private Polyline _chartPolyline;
 
         private Point _origin;
         private Line _xAxisLine, _yAxisLine;
 
+        private static List<Value> _values { get; set; }
+        private static List<Value> _values1 { get; set; }
+        private static List<Value> _values2 { get; set; }
+        private static List<Value> _values3 { get; set; }
+        private static List<Value> toBeShown { get; set; }
+        private static List<Timer> timers { get; set; }
+
+        public static void initTimers()
+        {
+            MetricsRegistry metricsRegistry = MetricsRegistry.Instance;
+            foreach (String metricsRegistryKey in metricsRegistry.Keys)
+            {
+                timers.Add(metricsRegistry.Timering(metricsRegistryKey));
+            }
+        }
+
+        public static void initSum()
+        {
+            MetricsRegistry metricsRegistry = MetricsRegistry.Instance;
+            int i = 0;
+            foreach (String metricsRegistryKey in metricsRegistry.Keys)
+            {
+                double valueToEnter = timers[i].Store.Sum / 10e6f;
+                _values.Add(new Value(i * 100, 100 * i));
+                i++;
+            }
+        }
+
+        public static void initAverage()
+        {
+            MetricsRegistry metricsRegistry = MetricsRegistry.Instance;
+            int i = 0;
+            foreach (String metricsRegistryKey in metricsRegistry.Keys)
+            {
+                double valueToEnter = timers[i].Store.GetMean() / 10e6f;
+                _values1.Add(new Value(i * 100, Math.Round(valueToEnter)));
+                i++;
+            }
+        }
+
+        public static void initMin()
+        {
+            MetricsRegistry metricsRegistry = MetricsRegistry.Instance;
+            int i = 0;
+            foreach (String metricsRegistryKey in metricsRegistry.Keys)
+            {
+                double valueToEnter = timers[i].Store.Min / 10e6f;
+                _values2.Add(new Value(i * 100, Math.Round(valueToEnter)));
+                i++;
+            }
+        }
+
+        public static void initMax()
+        {
+            MetricsRegistry metricsRegistry = MetricsRegistry.Instance;
+            int i = 0;
+            foreach (String metricsRegistryKey in metricsRegistry.Keys)
+            {
+                double valueToEnter = timers[i].Store.Max / 10e6f;
+                _values3.Add(new Value(i * 100, Math.Round(valueToEnter)));
+                i++;
+            }
+        }
+
+
         public void initGraph()
         {
             MetricsRegistry metricsRegistry = MetricsRegistry.Instance;
             _values = new();
-            int i = 0;
-            foreach (String metricsRegistryKey in metricsRegistry.Keys)
-            {
-                _values.Add(new Value(i * 100, 100 * i));
-                i++;
-            }
+            _values1 = new();
+            _values2 = new();
+            _values3 = new();
+            timers = new();
+            initTimers();
+            initSum();
+            initAverage();
+            initMin();
+            initMax();
+            toBeShown = _values;
         }
 
         public LineChartView()
@@ -204,7 +274,7 @@ namespace AppMetricsCSharp.Views
                     }
 
                     // add connection points to polyline
-                    foreach (var value in _values)
+                    foreach (var value in toBeShown)
                     {
                         var TOLERANCE = 0.01;
                         var holder = _holders.FirstOrDefault(h =>
@@ -217,6 +287,43 @@ namespace AppMetricsCSharp.Views
             catch (Exception e)
             {
                 Console.WriteLine(e.StackTrace);
+            }
+        }
+
+        private void changeUi(object sender, SelectionChangedEventArgs e)
+        {
+            string text = (e.AddedItems[0] as ComboBoxItem).Content as string;
+            if (text == "Time")
+            {
+                toBeShown = _values;
+                Paint();
+            }
+            else if (text == "Average")
+            {
+                toBeShown = _values1;
+                Paint();
+            }
+            else if (text == "Min")
+            {
+                toBeShown = _values2;
+                Paint();
+            }
+            else if (text == "Max")
+            {
+                toBeShown = _values3;
+                Paint();
+            }
+            else
+            {
+                if (toBeShown == null)
+                {
+                    initSum();
+                }
+                else
+                {
+                    toBeShown = _values;
+                    Paint();
+                }
             }
         }
     }

@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using ConsoleApp1;
+using ConsoleApp1.meters;
 using ConsoleApp1.reporters;
 
 // ReSharper disable All
@@ -14,15 +15,78 @@ namespace AppMetricsCSharp.Views
 {
     public partial class ColumnChartView
     {
+        public static void initTimers()
+        {
+            MetricsRegistry metricsRegistry = MetricsRegistry.Instance;
+            foreach (String metricsRegistryKey in metricsRegistry.Keys)
+            {
+                timers.Add(metricsRegistry.Timering(metricsRegistryKey));
+            }
+        }
+
+        public static void initSum()
+        {
+            MetricsRegistry metricsRegistry = MetricsRegistry.Instance;
+            int i = 0;
+            foreach (String metricsRegistryKey in metricsRegistry.Keys)
+            {
+                double value = Convert.ToDouble(String.Format("{0:0.000}", timers[i].Store.Sum / 10e6));
+                Items.Add(new Item(metricsRegistryKey, value));
+                i++;
+            }
+        }
+
+        public static void initAverage()
+        {
+            MetricsRegistry metricsRegistry = MetricsRegistry.Instance;
+            int i = 0;
+            foreach (String metricsRegistryKey in metricsRegistry.Keys)
+            {
+                double value = Convert.ToDouble(String.Format("{0:0.000}", timers[i].Store.GetMean() / 10e6));
+                Items1.Add(new Item(metricsRegistryKey, value));
+                i++;
+            }
+        }
+
+        public static void initMin()
+        {
+            MetricsRegistry metricsRegistry = MetricsRegistry.Instance;
+            int i = 0;
+            foreach (String metricsRegistryKey in metricsRegistry.Keys)
+            {
+                double value = Convert.ToDouble(String.Format("{0:0.000}", timers[i].Store.Min / 10e6));
+                Items2.Add(new Item(metricsRegistryKey, value));
+                i++;
+            }
+        }
+
+        public static void initMax()
+        {
+            MetricsRegistry metricsRegistry = MetricsRegistry.Instance;
+            int i = 0;
+            foreach (String metricsRegistryKey in metricsRegistry.Keys)
+            {
+                double value = Convert.ToDouble(String.Format("{0:0.000}", timers[i].Store.Max / 10e6));
+                Items3.Add(new Item(metricsRegistryKey, value));
+                i++;
+            }
+        }
 
         public static void initGraph()
         {
             MetricsRegistry metricsRegistry = MetricsRegistry.Instance;
             Items = new();
-            foreach (String metricsRegistryKey in metricsRegistry.Keys)
-            {
-                Items.Add(new Item(metricsRegistryKey, 100));
-            }
+            Items1 = new();
+            Items2 = new();
+            Items3 = new();
+            timers = new();
+
+            initTimers();
+            initSum();
+            initAverage();
+            initMin();
+            initMax();
+            toBeShown = Items;
         }
 
         public ColumnChartView()
@@ -36,17 +100,23 @@ namespace AppMetricsCSharp.Views
             Paint();
         }
 
+        private static List<Timer> timers { get; set; }
         private static List<Item> Items { get; set; }
+        private static List<Item> Items1 { get; set; }
+        private static List<Item> Items2 { get; set; }
+        private static List<Item> Items3 { get; set; }
+
+        private static List<Item> toBeShown { get; set; }
 
         private void Paint()
         {
             try
             {
                 float
-                    chartWidth = 1200,
-                    chartHeight = 700,
+                    chartWidth = 1366,
+                    chartHeight = 800,
                     axisMargin = 100,
-                    yAxisInterval = 50,
+                    yAxisInterval = 25,
                     blockWidth = 50,
                     blockMargin = 35;
 
@@ -149,13 +219,13 @@ namespace AppMetricsCSharp.Views
 
                     var yAxisTextBlock = new TextBlock
                     {
-                        Text = $"{yValue}",
+                        Text = $"{yValue / 100}s",
                         Foreground = Brushes.Black,
                         FontSize = 16
                     };
                     MainCanvas.Children.Add(yAxisTextBlock);
 
-                    Canvas.SetLeft(yAxisTextBlock, origin.X - 35);
+                    Canvas.SetLeft(yAxisTextBlock, origin.X - 50);
                     Canvas.SetTop(yAxisTextBlock, yAxisValue - 12.5);
 
 
@@ -165,7 +235,7 @@ namespace AppMetricsCSharp.Views
 
 
                 var margin = origin.X + blockMargin;
-                foreach (var item in Items)
+                foreach (var item in toBeShown)
                 {
                     var block = new Rectangle
                     {
@@ -194,6 +264,47 @@ namespace AppMetricsCSharp.Views
             catch (Exception exception)
             {
                 Console.WriteLine(exception.StackTrace);
+            }
+        }
+
+        private void changeUi(object sender, SelectionChangedEventArgs e)
+        {
+            string text = (e.AddedItems[0] as ComboBoxItem).Content as string;
+            if (text == "Time")
+            {
+                toBeShown = Items;
+                MainCanvas.Children.RemoveRange(1, MainCanvas.Children.Capacity - 1);
+                Paint();
+            }
+            else if (text == "Average")
+            {
+                toBeShown = Items1;
+                MainCanvas.Children.RemoveRange(1, MainCanvas.Children.Capacity - 1);
+                Paint();
+            }
+            else if (text == "Min")
+            {
+                toBeShown = Items2;
+                MainCanvas.Children.RemoveRange(1, MainCanvas.Children.Capacity - 1);
+                Paint();
+            }
+            else if (text == "Max")
+            {
+                toBeShown = Items3;
+                MainCanvas.Children.RemoveRange(1, MainCanvas.Children.Capacity - 1);
+                Paint();
+            }
+            else
+            {
+                if (toBeShown == null)
+                {
+                    initSum();
+                }
+                else
+                {
+                    toBeShown = Items;
+                    Paint();
+                }
             }
         }
     }

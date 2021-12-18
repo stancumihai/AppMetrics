@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 using AppMetricsCSharp.ViewModels;
-using AppMetricsCSharp.Views;
+using ConsoleApp1;
 
 namespace SwitchingViewsMVVM.Commands
 {
@@ -23,15 +23,19 @@ namespace SwitchingViewsMVVM.Commands
 
         public void Execute(object parameter)
         {
-            if(parameter.ToString() == "Column")
+            if (parameter.ToString() == "Column")
             {
+                MetricsRegistry.NullifyRegistry();
                 viewModel.SelectedViewModel = new ColumnChartModel();
             }
-            else if(parameter.ToString() == "Pie")
+            else if (parameter.ToString() == "Pie")
             {
+                MetricsRegistry.NullifyRegistry();
                 viewModel.SelectedViewModel = new PieChartModel();
-            }else if (parameter.ToString() == "Line")
+            }
+            else if (parameter.ToString() == "Line")
             {
+                MetricsRegistry.NullifyRegistry();
                 viewModel.SelectedViewModel = new LineChartModel();
             }
         }

@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Back\ConsoleUtility.cs" />
+    <Compile Include="Back\Constants.cs" />
     <Compile Include="Back\CounterDecorator.cs" />
     <Compile Include="Back\Meters\Counter.cs" />
     <Compile Include="Back\Meters\Store.cs" />
@@ -62,7 +63,7 @@
     <Compile Include="Back\MetricsRegistry.cs" />
     <Compile Include="Back\Reporters\ConsoleReporter.cs" />
     <Compile Include="Back\TaskClass.cs" />
-    <Compile Include="Back\TimerDecorator.cs" />
+    <Compile Include="Back\Measurer.cs" />
     <Compile Include="Front\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>

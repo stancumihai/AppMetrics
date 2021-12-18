@@ -15,7 +15,7 @@ namespace ConsoleApp1.meters
         private double max;
         private double min;
         private List<int> times;
-        private Store store = new();
+        private Store store;
 
         public Timer()
         {
@@ -85,7 +85,6 @@ namespace ConsoleApp1.meters
     {
         private Stopwatch _clock = new();
         private Timer _timer;
-        private static int OVERFLOW = 9000000;
 
         public TimeContext(Timer timer)
         {
@@ -97,7 +96,7 @@ namespace ConsoleApp1.meters
         {
             _clock.Stop();
             long ticks = _clock.ElapsedTicks;
-            double elapsed = 1000000000.0 * ticks / Stopwatch.Frequency - OVERFLOW;
+            double elapsed = 1000000000.0 * ticks / Stopwatch.Frequency;
             _timer.Update(elapsed);
         }
 
