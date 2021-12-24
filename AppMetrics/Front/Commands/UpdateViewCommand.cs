@@ -23,20 +23,21 @@ namespace SwitchingViewsMVVM.Commands
 
         public void Execute(object parameter)
         {
-            if (parameter.ToString() == "Column")
+            Console.WriteLine(parameter.ToString());
+            switch (parameter.ToString())
             {
-                MetricsRegistry.NullifyRegistry();
-                viewModel.SelectedViewModel = new ColumnChartModel();
-            }
-            else if (parameter.ToString() == "Pie")
-            {
-                MetricsRegistry.NullifyRegistry();
-                viewModel.SelectedViewModel = new PieChartModel();
-            }
-            else if (parameter.ToString() == "Line")
-            {
-                MetricsRegistry.NullifyRegistry();
-                viewModel.SelectedViewModel = new LineChartModel();
+                case "Column":
+                    MetricsRegistry.NullifyRegistry();
+                    viewModel.SelectedViewModel = new ColumnChartModel();
+                    break;
+                case "Pie":
+                    MetricsRegistry.NullifyRegistry();
+                    viewModel.SelectedViewModel = new PieChartModel();
+                    break;
+                case "Line":
+                    MetricsRegistry.NullifyRegistry();
+                    viewModel.SelectedViewModel = new LineChartModel();
+                    break;
             }
         }
     }

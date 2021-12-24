@@ -126,7 +126,7 @@ namespace AppMetricsCSharp.Views
                 var yAxisEndPoint = new Point(axisMargin, axisMargin);
                 var origin = new Point(axisMargin, chartHeight - axisMargin);
                 var xAxisEndPoint = new Point(chartWidth - axisMargin, chartHeight - axisMargin);
-
+                Console.WriteLine(xAxisEndPoint);
                 var yAxisEndPointEllipse = new Ellipse
                 {
                     Fill = Brushes.Aqua,

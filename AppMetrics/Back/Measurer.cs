@@ -14,17 +14,7 @@ namespace ConsoleApp1
                 functionToPass(size);
             }
         }
-        
-        public static void Wrapper(Func<T> functionToPass,T size)
-        {
-            MetricsRegistry metricsRegistry = MetricsRegistry.Instance;
-            Timer timer = metricsRegistry.Timer(functionToPass.Method.Name);
-            using (timer.time())
-            {
-                functionToPass();
-            }
-        }
-        
+
         public static void Wrapper(Func<T> functionToPass)
         {
             MetricsRegistry metricsRegistry = MetricsRegistry.Instance;
@@ -34,7 +24,5 @@ namespace ConsoleApp1
                 functionToPass();
             }
         }
-        
-      
     }
 }

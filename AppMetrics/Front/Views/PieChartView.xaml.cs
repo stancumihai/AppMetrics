@@ -50,7 +50,6 @@ namespace AppMetricsCSharp.Views
                 Timer timer = metricsRegistry.Timering(metricsRegistryKey);
                 double valueToEnter =
                     Convert.ToDouble(String.Format("{0:0.000}", timer.Store.Sum * 100 / (Constants.SECONDS * sum)));
-                Console.WriteLine(valueToEnter);
                 Categories.Add(new Category(valueToEnter, metricsRegistryKey, brushes[i]));
                 i++;
             }

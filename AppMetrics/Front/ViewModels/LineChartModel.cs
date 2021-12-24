@@ -1,7 +1,4 @@
-﻿using System;
-using System.Timers;
-
-namespace AppMetricsCSharp.ViewModels
+﻿namespace AppMetricsCSharp.ViewModels
 {
     public class LineChartModel : BaseViewModel
     {
